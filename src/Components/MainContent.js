@@ -1,5 +1,7 @@
 import React from "react";
 import Footer from "./Footer";
+import Button from "./Button";
+import Input from "./Input";
 
 const validator = require('email-validator');
 
@@ -10,7 +12,7 @@ class MainContent extends React.Component {
             isLoggedIn: false,
             username: '',
             password: '',
-            validUser : false,
+            validUser : true,
             inValidUser : false,
         }
         this.handleUserNameChange = this.handleUserNameChange.bind(this);
@@ -30,7 +32,7 @@ class MainContent extends React.Component {
         }
         else {
             this.setState({
-                inValidUser : true,
+                validUser : false,
             })
         }
          
@@ -42,30 +44,30 @@ class MainContent extends React.Component {
     }
 
     render() {
-        if(this.state.inValidUser){
-            return (
-                <h3>You have entered incorrect email</h3>
-            )
-        }
-        else if (!this.state.isLoggedIn) {
-            return (
-                <div>
-                    <h1>Welcome to Login Page</h1>
-                    <label>Username</label>
-                    <input type='text' value={this.state.username} onChange={this.handleUserNameChange}></input>
-                    <br />
-                    <label>Password </label>
-                    <input type='text' value={this.state.password} onChange={this.handlePasswordChange}></input>
-                    <br/>
-                    <button type="button" disabled = {!this.state.validUser} onClick={this.handleLogIn}>Sign in</button>
-                </div>
-            )
-        }
-        else{
+        if(this.state.isLoggedIn){
             return (
                 <div>
                     <h1>You have succesfully logged in.</h1>
                     <Footer greeting = {this.state.username}/>
+                </div>
+            )
+        }
+        else if(!this.state.validUser){
+            return (
+                <h3>You have entered incorrect email</h3>
+            )
+        }
+        else {
+            return (
+                <div>
+                    <h1>Welcome to Login Page</h1>
+                    <label>Username</label>
+                    <Input userName = {this.state.username} handleChange = {this.handleUserNameChange}/>
+                    <br />
+                    <label>Password </label>
+                    <Input userName = {this.state.password} handleChange = {this.handlePasswordChange}/>
+                    <br/>
+                    <Button disableProp = {this.state.validUser && !this.state.password} handleClick = {this.handleLogIn}/>
                 </div>
             )
         }
